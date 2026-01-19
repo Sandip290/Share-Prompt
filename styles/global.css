@@ -4,6 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
 /* 
   Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
 */
@@ -38,6 +60,15 @@
   top: 0;
   opacity: 0.4;
   filter: invert(1);
+}
+
+.dark .main:before {
+  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #111 100%);
+}
+
+.dark .main:after {
+  filter: invert(0);
+  opacity: 0.2;
 }
 
 .gradient {
@@ -78,15 +109,27 @@
 }
 
 .black_btn {
-  @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+  @apply rounded-full border border-black bg-black/90 py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center backdrop-blur-sm shadow-md;
+}
+
+.dark .black_btn {
+  @apply border-white bg-white/90 text-black hover:bg-black hover:text-white;
 }
 
 .outline_btn {
-  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black/90 hover:text-white text-center text-sm font-inter flex items-center justify-center backdrop-blur-sm;
+}
+
+.dark .outline_btn {
+  @apply border-white text-white hover:bg-white/90 hover:text-black;
 }
 
 .head_text {
   @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-6xl;
+}
+
+.dark .head_text {
+  @apply text-white;
 }
 
 .orange_gradient {
@@ -140,12 +183,24 @@
   @apply max-sm:hidden font-satoshi font-semibold text-lg text-black tracking-wide;
 }
 
+.dark .logo_text {
+  @apply text-white;
+}
+
 .dropdown {
   @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-white min-w-[210px] flex flex-col gap-2 justify-end items-end;
 }
 
 .dropdown_link {
   @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+}
+
+.dark .dropdown_link {
+  @apply text-gray-200 hover:text-gray-400;
+}
+
+.dark .dropdown {
+  @apply bg-gray-900 border border-gray-700;
 }
 
 /* PromptCard Component */
