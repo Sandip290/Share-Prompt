@@ -7,52 +7,52 @@ import Profile from '@components/profile';
 
 const MyProfile = () => {
 
-    const { data: session } = useSession();
+  const { data: session } = useSession();
 
-    const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-          const response = await fetch(`/api/users/${session?.user.id}/posts`);
-          const data = await response.json();
-    
-          setPosts(data);
-        }
-    
-       if(session?.user.id) fetchPosts();
-      }, []);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await fetch(`/api/users/${session?.user.id}/posts`);
+      const data = await response.json();
 
-    const handleEdit = (posts) => {
-      router.push(`/update-prompt?id=${posts._id}`);
+      setPosts(data);
     }
 
-    const handleDelete = async (posts) => {
-      const hasConfirmed = confirm("are you sure you want to delete this prompt");
+    if (session?.user.id) fetchPosts();
+  }, []);
 
-      if(hasConfirmed) {
-        try{
-          await fetch(`/api/prompt/${posts._id.toString()}`,{
-            method: 'DELETE',
-          });
+  const handleEdit = (post) => {
+    router.push(`/update-prompt?id=${post._id}`);
+  }
 
-          const filteredPosts = posts.filter((p) => p._id !== posts._id)
+  const handleDelete = async (post) => {
+    const hasConfirmed = confirm("are you sure you want to delete this prompt");
 
-          setPosts(filteredPosts);
-        }catch(error){
-          console.log(error);
-        }
+    if (hasConfirmed) {
+      try {
+        await fetch(`/api/prompt/${post._id.toString()}`, {
+          method: 'DELETE',
+        });
+
+        const filteredPosts = posts.filter((p) => p._id !== post._id)
+
+        setPosts(filteredPosts);
+      } catch (error) {
+        console.log(error);
       }
     }
+  }
 
   return (
     <Profile
-         name="My"
-         desc="Welcome to your personal profile page"
-         data={posts}
-         handleEdit={handleEdit}
-         handleDelete={handleDelete}
+      name="My"
+      desc="Welcome to your personal profile page"
+      data={posts}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
     />
   )
 }

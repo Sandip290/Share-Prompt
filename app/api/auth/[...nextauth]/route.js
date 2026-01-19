@@ -34,9 +34,18 @@ const handler = NextAuth({
 
                 //if not, create a new user
                 if (!userExists) {
+                    // Just in case collision happens, we might want to try/catch specifically for that, 
+                    // but for now let's hope unique names + simple fallback works. 
+                    // Better yet, let's just append a random suffix to everything to ensure uniqueness.
+                    // New Strategy: Name (max 15 chars) + Random (4 chars).
+
+                    const namePart = profile.name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase().slice(0, 15);
+                    const randomSuffix = Math.floor(1000 + Math.random() * 9000).toString(); // 4 digits
+                    const username = (namePart || "user") + randomSuffix;
+
                     await User.create({
                         email: profile.email,
-                        username: profile.name.replace(" ", "").toLowerCase(),
+                        username: username,
                         image: profile.picture
                     })
                 }
